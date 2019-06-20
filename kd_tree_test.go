@@ -210,3 +210,38 @@ func TestKDTree_Remove(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestKDTree_RadiusSearchNil(t *testing.T) {
+	tree := New()
+	points := tree.RadiusSearch(point2.Point2{X:-2}, 2.1)
+	if points != nil {
+		t.Fail()
+	}
+}
+
+func TestKDTree_RadiusSearch(t *testing.T) {
+	tree := testTree()
+	expected := []Point{point2.Point2{}, point2.Point2{X:-1}, point2.Point2{X: -1, Y: -1}, point2.Point2{X: -1, Y: 1}}
+	points := tree.RadiusSearch(point2.Point2{X:-2}, 2.1)
+	for i := range points {
+		if !equals(points[i], expected[i]) {
+			t.Fail()
+		}
+	}
+
+	expected = []Point{point2.Point2{X:1}}
+	points = tree.RadiusSearch(point2.Point2{X:2}, 2.0)
+	for i := range points {
+		if !equals(points[i], expected[i]) {
+			t.Fail()
+		}
+	}
+
+	expected = []Point{point2.Point2{},point2.Point2{X:1}}
+	points = tree.RadiusSearch(point2.Point2{X:2}, 2.0 + floatEqualityThreshold)
+	for i := range points {
+		if !equals(points[i], expected[i]) {
+			t.Fail()
+		}
+	}
+}
