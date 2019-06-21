@@ -238,7 +238,7 @@ func TestKDTree_RadiusSearch(t *testing.T) {
 	}
 
 	expected = []Point{point2.Point2{},point2.Point2{X:1}}
-	points = tree.RadiusSearch(point2.Point2{X:2}, 2.0 + floatEqualityThreshold)
+	points = tree.RadiusSearch(point2.Point2{X:2}, 2.0 + 0.00000000000001)
 	for i := range points {
 		if !equals(points[i], expected[i]) {
 			t.Fail()

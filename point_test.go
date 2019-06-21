@@ -26,11 +26,11 @@ func TestEquals(t *testing.T)  {
 func TestDistance2(t *testing.T) {
 	p1 := point2.Point2{}
 	p2 := point2.Point2{}
-	if distance(p1, p2) > floatEqualityThreshold {
+	if distance(p1, p2) > 0 {
 		t.Fail()
 	}
 	p3 := point2.Point2{X:1}
-	if distance(p1, p3) - 1.0 > floatEqualityThreshold {
+	if distance(p1, p3) - 1.0 > 0 {
 		t.Fail()
 	}
 	p4 := point3.Point3{}
