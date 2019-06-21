@@ -57,7 +57,7 @@ func (k *KDTree) RadiusSearch(p Point, r float64) []Point {
 }
 
 func (n *node) Add(p Point, d int) {
-	if p.Dimension(d) < n.Point.Dimension(d) {
+	if p.Dimension(d) < n.Dimension(d) {
 		if n.Left == nil {
 			n.Left = &node{p, nil, nil}
 		} else {
@@ -74,6 +74,8 @@ func (n *node) Add(p Point, d int) {
 
 func (n *node) Find(p Point, d int, parent *node) (*node, *node, int) {
 	d = d % n.Dimensions()
+
+
 	if equals(n, p) {
 		return n, parent, d
 	}
@@ -107,7 +109,10 @@ func (n *node) Remove(p Point, d int, parent *node) bool {
 	if found.Left != nil {
 		sub := found.Left.FindMin(foundD, foundD+1)
 		found.Point = sub.Point
-		return found.Left.Remove(sub.Point, foundD+1, found)
+		found.Left.Remove(sub.Point, foundD+1, found)
+		found.Right = found.Left
+		found.Left = nil
+		return true
 	}
 
 	if parent != nil {
@@ -154,11 +159,11 @@ func (n *node) RadiusSearch(p Point, r float64) []Point {
 		points = append(points, n.Point)
 	}
 
-	if n.Left != nil && distance2(n.Left, p) < r {
+	if n.Left != nil {
 		points = append(points, n.Left.RadiusSearch(p, r)...)
 	}
 
-	if n.Right != nil && distance2(n.Right, p) < r {
+	if n.Right != nil {
 		points = append(points, n.Right.RadiusSearch(p, r)...)
 	}
 

@@ -137,6 +137,46 @@ func TestNode_Find(t *testing.T) {
 	}
 }
 
+func TestKDTree_RemoveMoving(t *testing.T) {
+	tree := &KDTree{}
+	p1 := point2.Point2{X:-1}
+	p2 := point2.Point2{X:-1.1}
+	p3 := point2.Point2{X:-1.2}
+
+	tree.Remove(p1)
+	p1.X += 0.1
+	tree.Add(p1)
+	tree.Remove(p2)
+	p2.X += 0.1
+	tree.Add(p2)
+	tree.Remove(p3)
+	p3.X += 0.1
+	tree.Add(p3)
+	tree.Remove(p1)
+	p1.X += 0.1
+	tree.Add(p1)
+	tree.Remove(p2)
+	p2.X += 0.1
+	tree.Add(p2)
+	tree.Remove(p3)
+	p3.X += 0.1
+	tree.Add(p3)
+	if !equals(tree.root, p2) || !equals(tree.root.Left, p3) || !equals(tree.root.Right, p1) {
+		t.Fail()
+	}
+}
+
+func TestKDTree_RemoveRoot(t *testing.T) {
+	tree := KDTree{}
+	tree.Add(point2.Point2{})
+	tree.Add(point2.Point2{X:-1})
+	tree.Remove(point2.Point2{})
+
+	if tree.root == nil {
+		t.Fail()
+	}
+}
+
 func TestKDTree_Remove(t *testing.T) {
 	tree := New()
 	tree.Add(point2.Point2{})
